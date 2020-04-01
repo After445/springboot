@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.core.pc.system.mapper.SysRoleMapper">
+    <select id="getInfoByUserId" resultType="SysRole">
+        SELECT sr.*
+        FROM sys_role sr,sys_user su
+        WHERE su.id = #{userId} AND sr.id = su.role_id
+        LIMIT 1
+    </select>
+    <select id="getRoleListByParentId" resultType="SysRole">
+        SELECT *
+        FROM sys_role
+        WHERE parent_id = #{parentId}
+        ORDER BY sort ASC,parent_id ASC
+    </select>
+</mapper>

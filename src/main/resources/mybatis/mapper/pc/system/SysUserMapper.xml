@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper">
+    <select id="getListVo" resultType="com.weiziplus.springboot.core.pc.system.vo.SysUserVo">
+        SELECT su.id,su.username,su.real_name as realName,su.allow_login AS allowLogin,su.phone AS phone,
+        su.last_active_time AS lastActiveTime,su.create_time AS createTime,IFNULL(sr.name,'暂无权限') AS roleName,
+        su.last_ip_address AS laseIpAddress,CONCAT('${filePathPrefix}',su.icon) `icon`
+        FROM sys_user su
+        LEFT JOIN sys_role sr ON sr.id = su.role_id
+        WHERE su.id <![CDATA[>]]> 1
+        <if test="null != userName and '' != userName">
+            AND position(#{userName} IN su.username)
+        </if>
+        <if test="null != roleId">
+            AND su.role_id = #{roleId}
+        </if>
+        <if test="null != allowLogin">
+            AND su.allow_login = #{allowLogin}
+        </if>
+        <if test="null != lastActiveTime and '' != lastActiveTime">
+            AND su.last_active_time LIKE concat(#{lastActiveTime},'%')
+        </if>
+        <if test="null != createTime and '' != createTime">
+            AND su.create_time LIKE concat(#{createTime},'%')
+        </if>
+        ORDER BY su.create_time ASC
+    </select>
+</mapper>
